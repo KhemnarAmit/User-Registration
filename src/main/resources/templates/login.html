@@ -15,16 +15,11 @@
 		body {
 			background-color: #f8f9fa;
 			font-family: 'Arial', sans-serif;
-			margin: 0;
-			padding: 0;
 			height: 100vh;
-			/* Ensures the body covers the entire screen */
 			overflow: hidden;
 			display: flex;
 			justify-content: center;
-			/* Horizontally center */
 			align-items: center;
-			/* Vertically center */
 		}
 
 		.background-image {
@@ -67,18 +62,17 @@
 			font-size: 2rem;
 			color: #333;
 		}
-	</style>
 
+		.input-group-text {
+			cursor: pointer;
+		}
+	</style>
 </head>
 
 <body>
-	<!-- Preload the background image -->
 	<div class="background-image"></div>
-
-	<!-- Loader until image loads -->
 	<div class="loader">Loading...</div>
 
-	<!-- Login Form -->
 	<div class="login-container">
 		<div class="card shadow p-4">
 			<h3 class="text-center">Login</h3>
@@ -88,14 +82,17 @@
 
 				<div class="mb-3">
 					<label class="form-label">Username</label>
-					<input type="text" name="username" class="form-control" required
-						placeholder="Enter your E-mail Address">
+					<input type="text" name="username" class="form-control" required placeholder="Enter your E-mail Address">
 				</div>
 
 				<div class="mb-3">
 					<label class="form-label">Password</label>
-					<input type="password" name="password" class="form-control" required
-						placeholder="Enter your Password">
+					<div class="input-group">
+						<input type="password" id="password" name="password" class="form-control" required placeholder="Enter your Password">
+						<span class="input-group-text" onclick="togglePassword()">
+							<i id="eye-icon" class="bi bi-eye"></i>
+						</span>
+					</div>
 				</div>
 
 				<button type="submit" class="btn btn-primary w-100">Login</button>
@@ -106,21 +103,32 @@
 			</p>
 		</div>
 	</div>
-	
-	<div class="text-center mt-3">
-		<a th:href="@{/forgot}" class="text-danger fw-bold">Forgot Password?</a>
-	</div>
 
-	<!-- JavaScript to hide loader and reveal content once image is loaded -->
+
 	<script>
 		window.onload = function () {
-			// Hide loader and show content after the image has loaded
 			document.querySelector('.loader').style.display = 'none';
 			document.querySelector('.background-image').style.opacity = 1;
 			document.querySelector('.login-container').style.opacity = 1;
 		};
+
+		function togglePassword() {
+			const passwordField = document.getElementById('password');
+			const eyeIcon = document.getElementById('eye-icon');
+			if (passwordField.type === 'password') {
+				passwordField.type = 'text';
+				eyeIcon.classList.remove('bi-eye');
+				eyeIcon.classList.add('bi-eye-slash');
+			} else {
+				passwordField.type = 'password';
+				eyeIcon.classList.remove('bi-eye-slash');
+				eyeIcon.classList.add('bi-eye');
+			}
+		}
 	</script>
 
+	<!-- Bootstrap Icons -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
 </body>
 
 </html>
