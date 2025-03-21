@@ -63,6 +63,32 @@
             font-size: 2rem;
             color: #333;
         }
+
+        /* Big loading text */
+        .loading-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 3rem;
+            color: #ff5722;  /* A noticeable color */
+            font-weight: bold;
+            text-align: center;
+        }
+
+        /* After Image Load Text */
+        .contact-text {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 2rem;
+            color: #28a745;  /* Success color */
+            font-weight: bold;
+            text-align: center;
+        }
+
     </style>
 
 </head>
@@ -70,8 +96,11 @@
     <!-- Preload the background image -->
     <div class="background-image"></div>
 
-    <!-- Loader until image loads -->
-    <div class="loader">Loading...</div>
+    <!-- Big Loading Text -->
+    <div class="loading-text">Page is loading, so wait...</div>
+
+    <!-- Contact Admin Text -->
+    <div class="contact-text">Contact Admin "Amit K"</div>
 
     <!-- Login Form -->
     <div class="login-container">
@@ -97,16 +126,29 @@
             <p class="text-center mt-3">
                 Don't have an account? <a th:href="@{/register}">Register</a>
             </p>
+
+            <!-- Forgot Password Link -->
+            <p class="text-center mt-3">
+                <a href="/images/forgot.jpg" target="_blank" alt="wait we are loading page" id="forgotPasswordLink">Forgot Password?</a>
+            </p>
         </div>
     </div>
 
     <!-- JavaScript to hide loader and reveal content once image is loaded -->
     <script>
         window.onload = function () {
-            // Hide loader and show content after the image has loaded
+            // Hide the loading text and show the content after the image has loaded
+            document.querySelector('.loading-text').style.display = 'none';
+            document.querySelector('.contact-text').style.display = 'block';
             document.querySelector('.loader').style.display = 'none';
             document.querySelector('.background-image').style.opacity = 1;
             document.querySelector('.login-container').style.opacity = 1;
+        };
+
+        // Show "Page is loading" message when the forgot password link is clicked and the image is opening in a new tab
+        document.getElementById('forgotPasswordLink').onclick = function() {
+            window.open(this.href, '_blank');
+            return false;  // Prevent the default anchor behavior (open link in current window)
         };
     </script>
 
