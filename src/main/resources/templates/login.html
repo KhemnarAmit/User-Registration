@@ -16,7 +16,11 @@
             font-family: 'Arial', sans-serif;
             margin: 0;
             padding: 0;
+            height: 100vh;  /* Ensures the body covers the entire screen */
             overflow: hidden;
+            display: flex;
+            justify-content: center;  /* Horizontally center */
+            align-items: center;  /* Vertically center */
         }
 
         .background-image {
@@ -35,11 +39,7 @@
         }
 
         .login-container {
-            position: absolute;
-            bottom: 20px;
-            right: 20px;
             width: 350px;
-            margin: 0;
             opacity: 0;
             transition: opacity 1s ease-in-out;
         }
@@ -83,12 +83,12 @@
 
                 <div class="mb-3">
                     <label class="form-label">Username</label>
-                    <input type="text" name="username" class="form-control" required>
+                    <input type="text" name="username" class="form-control" required placeholder="Enter your E-mail Address">
                 </div>
 
                 <div class="mb-3">
                     <label class="form-label">Password</label>
-                    <input type="password" name="password" class="form-control" required>
+                    <input type="password" name="password" class="form-control" required placeholder="Enter your Password">
                 </div>
 
                 <button type="submit" class="btn btn-primary w-100">Login</button>
