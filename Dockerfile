@@ -1,18 +1,12 @@
- 
-# Use a base image with OpenJDK and install Maven
-FROM maven:3.8.6-openjdk-17-slim
-
-# Set the working directory inside the container
+# Use Maven to build the application
+FROM maven:3.8.5-openjdk-17 AS build
 WORKDIR /app
-
-# Copy the project files into the container
-COPY . /app
-
-# Package the application with Maven
+COPY . .
 RUN mvn clean package -DskipTests
 
-# Expose port 8080 for the Spring Boot app
+# Use OpenJDK 17 to run the application
+FROM openjdk:17-jdk
+WORKDIR /app
+COPY --from=build /app/target/*.jar app.jar
 EXPOSE 8080
-
-# Run the Spring Boot application (assuming the JAR file is in the target directory)
-CMD ["java", "-jar", "target/UserRegistration.jar"]
+ENTRYPOINT ["java", "-jar", "app.jar"]
