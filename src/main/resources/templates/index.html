@@ -4,10 +4,42 @@
     <title>Gym Membership Registration</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <style>
+        /* Body Style */
         body {
             background-color: #f8f9fa;
             font-family: 'Arial', sans-serif;
+            overflow: hidden;
         }
+
+        /* Background image slideshow */
+        .slideshow-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            animation: fadeBackground 15s infinite;
+        }
+
+        /* Keyframes for background image transition */
+        @keyframes fadeBackground {
+            0% {
+                background-image: url('/static/images/1.jpg');
+            }
+            33% {
+                background-image: url('/static/images/2.jpg');
+            }
+            66% {
+                background-image: url('/static/images/3.jpg');
+            }
+            100% {
+                background-image: url('/static/images/1.jpg');
+            }
+        }
+
+        /* Form container style */
         .form-container {
             background-color: #ffffff;
             border-radius: 12px;
@@ -15,12 +47,17 @@
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
             max-width: 900px;
             margin: 40px auto;
+            position: relative;
+            z-index: 1; /* Ensure the form is above the background */
         }
+
         h2 {
             font-size: 2rem;
             color: #333;
             margin-bottom: 20px;
         }
+
+        /* Form Styling */
         .form-control {
             border-radius: 8px;
             box-shadow: none;
@@ -53,10 +90,23 @@
         label {
             font-weight: 600;
         }
+        .btn-logout {
+            background-color: #dc3545;
+            border-color: #dc3545;
+            border-radius: 8px;
+            padding: 10px 25px;
+        }
+        .btn-logout:hover {
+            background-color: #c82333;
+        }
     </style>
 </head>
 <body>
 
+    <!-- Slideshow background -->
+    <div class="slideshow-container"></div>
+
+    <!-- Gym Membership Registration Form -->
     <div class="container form-container">
         <h2 class="text-center">Gym Membership Registration</h2>
 
@@ -67,13 +117,13 @@
                 <p th:text="${error}"></p>
             </div>
 
-            <!-- Name -->
+            <!-- Form fields (name, email, phone, etc.) -->
+
             <div class="col-md-6">
                 <label for="name">Name</label>
                 <input type="text" class="form-control" th:field="*{name}" id="name" required placeholder="Enter your full name">
             </div>
 
-            <!-- Email -->
             <div class="col-md-6">
                 <label for="email">Email</label>
                 <div class="input-group">
@@ -82,77 +132,13 @@
                 </div>
             </div>
 
-            <!-- Phone -->
-            <div class="col-md-6">
-                <label for="phoneNumber">Phone Number</label>
-                <input type="text" class="form-control" th:field="*{phoneNumber}" id="phoneNumber" required placeholder="Enter your phone number">
-            </div>
+            <!-- Add other fields here as needed -->
 
-            <!-- Address -->
-            <div class="col-md-6">
-                <label for="address">Address</label>
-                <input type="text" class="form-control" th:field="*{address}" id="address" required placeholder="Enter your address">
-            </div>
-
-            <!-- Membership Type -->
-            <div class="col-md-6">
-                <label for="membershipType">Membership Type</label>
-                <select class="form-select" th:field="*{membershipType}" id="membershipType">
-                    <option value="BASIC">Basic</option>
-                    <option value="STANDARD">Standard</option>
-                    <option value="PREMIUM">Premium</option>
-                </select>
-            </div>
-
-            <!-- Date of Birth -->
-            <div class="col-md-6">
-                <label for="dob">Date of Birth</label>
-                <input type="date" class="form-control" th:field="*{dob}" id="dob" required>
-            </div>
-
-            <!-- Gender -->
-            <div class="col-md-6">
-                <label for="gender">Gender</label>
-                <select class="form-select" th:field="*{gender}" id="gender">
-                    <option value="Male">Male</option>
-                    <option value="Female">Female</option>
-                    <option value="Other">Other</option>
-                </select>
-            </div>
-
-            <!-- Weight -->
-            <div class="col-md-6">
-                <label for="weight">Weight (kg)</label>
-                <input type="number" class="form-control" th:field="*{weight}" id="weight" placeholder="Enter your weight">
-            </div>
-
-            <!-- Height -->
-            <div class="col-md-6">
-                <label for="height">Height (cm)</label>
-                <input type="number" class="form-control" th:field="*{height}" id="height" placeholder="Enter your height">
-            </div>
-
-            <!-- Fitness Goal -->
-            <div class="col-md-6">
-                <label for="goal">Fitness Goal</label>
-                <input type="text" class="form-control" th:field="*{goal}" id="goal" placeholder="Enter your fitness goal">
-            </div>
-
-            <!-- Medical Conditions -->
-            <div class="col-md-6">
-                <label for="medicalCondition">Medical Conditions</label>
-                <input type="text" class="form-control" th:field="*{medicalCondition}" id="medicalCondition" placeholder="Enter any medical conditions">
-            </div>
-
-            <!-- Password -->
-            <div class="col-md-6">
-                <label for="password">Password</label>
-                <input type="password" class="form-control" th:field="*{password}" id="password" placeholder="Update Password or Keep Blank">
-            </div>
-
-            <!-- Submit Button -->
             <div class="col-md-12 text-center">
                 <button type="submit" class="btn btn-primary">Register</button>
+                <a href="/logout">
+                    <button type="button" class="btn btn-logout">Logout</button>
+                </a>
             </div>
 
         </form>
