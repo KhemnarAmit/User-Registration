@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.ui.Model;
 import com.login.model.*;
 import com.login.service.GymMemberService;
@@ -56,8 +57,8 @@ public class HomeController {
 	public String registerUser(@ModelAttribute GymMember gymMember, Model model) {
 		boolean isRegistered = service.registerMember(gymMember);
 		if (!isRegistered) {
-			model.addAttribute("error", "User with this email already exists!");
-			return "register";
+			model.addAttribute("errorMessage", "User with this email already exists!");
+			return "error";
 		}
 		return "registrationsuccess";
 	}
@@ -67,4 +68,9 @@ public class HomeController {
         // Handle the logout logic
         return "redirect:/login";  // Redirect to the home page after logout
     }
+	
+	@GetMapping("/error")
+	public String error() {
+		return "error";
+	}
 }
