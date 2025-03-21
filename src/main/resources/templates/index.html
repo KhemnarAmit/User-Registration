@@ -182,16 +182,19 @@
                 <input type="password" class="form-control" th:field="*{password}" id="password" placeholder="Update Password or Keep Blank">
             </div>
 
-            <!-- Submit and Logout Buttons -->
+            <!-- Submit Button -->
             <div class="col-md-12 text-center">
                 <button type="submit" class="btn btn-primary">Register</button>
-                <!-- Logout button -->
-                <form action="#" th:action="@{/logout}" method="post" class="mt-3">
-                    <button type="submit" class="btn btn-danger">Logout</button>
-                </form>
             </div>
 
         </form>
+
+        <!-- Logout button (outside of the form) -->
+        <div class="text-center mt-3">
+            <form action="#" th:action="@{/logout}" method="post">
+                <button type="submit" class="btn btn-danger">Logout</button>
+            </form>
+        </div>
     </div>
 
     <!-- Bootstrap JS and icons (for icons) -->
