@@ -82,13 +82,15 @@
 
 				<div class="mb-3">
 					<label class="form-label">Username</label>
-					<input type="text" name="username" class="form-control" required placeholder="Enter your E-mail Address">
+					<input type="text" name="username" class="form-control" required
+						placeholder="Enter your E-mail Address">
 				</div>
 
 				<div class="mb-3">
 					<label class="form-label">Password</label>
 					<div class="input-group">
-						<input type="password" id="password" name="password" class="form-control" required placeholder="Enter your Password">
+						<input type="password" id="password" name="password" class="form-control" required
+							placeholder="Enter your Password">
 						<span class="input-group-text" onclick="togglePassword()">
 							<i id="eye-icon" class="bi bi-eye"></i>
 						</span>
@@ -101,9 +103,13 @@
 			<p class="text-center mt-3">
 				Don't have an account? <a th:href="@{/register}">Register</a>
 			</p>
+			
+			<p class="text-center mt-3">
+				Forgot Password ? <a th:href="@{/forgot-password}">click here</a>
+			</p>
+
 		</div>
 	</div>
-
 
 	<script>
 		window.onload = function () {

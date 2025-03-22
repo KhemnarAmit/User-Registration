@@ -1,22 +1,28 @@
 package com.login;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+
 import org.springframework.ui.Model;
 import com.login.model.*;
 import com.login.service.GymMemberService;
+
 import com.login.service.UserService;
-import com.login.repo.UserRepository;
+
+import com.login.repo.*;
 
 @Controller
 public class HomeController {
 
 	@Autowired
 	private GymMemberService service;
+
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 	private final UserService userService;
 	private final UserRepository userRepository;
 
@@ -62,15 +68,22 @@ public class HomeController {
 		}
 		return "registrationsuccess";
 	}
-	
+
 	@PostMapping("/logout")
-    public String logout() {
-        // Handle the logout logic
-        return "redirect:/login";  // Redirect to the home page after logout
-    }
-	
+	public String logout() {
+		// Handle the logout logic
+		return "redirect:/login"; // Redirect to the home page after logout
+	}
+
 	@GetMapping("/error")
 	public String error() {
 		return "error";
 	}
+	@GetMapping("/forgot-password")
+	public String forgotPassword() {
+		return "forgot-password";
+	}
+
+	
+
 }
