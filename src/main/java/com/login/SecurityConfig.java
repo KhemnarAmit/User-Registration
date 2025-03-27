@@ -20,24 +20,25 @@ public class SecurityConfig {
 	
 	@Bean
 	SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-		return http
-				.authorizeHttpRequests(auth -> auth
-						.requestMatchers("/images/**", "/css/**", "/js/**").permitAll()
-						.requestMatchers("/register", "/forgot-password").permitAll()
-						.anyRequest().authenticated()
-						)
-				.formLogin(form->form
-						.loginPage("/login")
-						.defaultSuccessUrl("/",true)
-						.permitAll()	
-						)
-				.logout(logout -> logout
-						.logoutUrl("/logout")
-						.logoutSuccessUrl("/login?logout")
-						.permitAll()
-						)
-				.build();
+	    return http
+	            .authorizeHttpRequests(auth -> auth
+	                    .requestMatchers("/images/**", "/css/**", "/js/**").permitAll()
+	                    .requestMatchers("/register", "/forgot-password","/verify","/verify1","/error","/success").permitAll() // Ensure "/verify" is allowed
+	                    .anyRequest().authenticated()
+	            )
+	            .formLogin(form -> form
+	                    .loginPage("/login")
+	                    .defaultSuccessUrl("/", true)
+	                    .permitAll()
+	            )
+	            .logout(logout -> logout
+	                    .logoutUrl("/logout")
+	                    .logoutSuccessUrl("/login?logout")
+	                    .permitAll()
+	            )
+	            .build();
 	}
+
 	
 	
 	@Bean

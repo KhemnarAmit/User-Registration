@@ -7,17 +7,17 @@
         body {
             background-color: #f8f9fa;
             font-family: 'Arial', sans-serif;
-            background-image: url('/static/images/1.jpg'); /* Adding background image */
+            background-image: url('/static/images/1.jpg');
             background-size: cover;
             background-position: center;
-            background-attachment: fixed; /* Makes the background stay fixed when scrolling */
-            height: 100vh; /* Ensure the background covers the whole page */
+            background-attachment: fixed;
+            height: 100vh;
             margin: 0;
-            transition: background-image 1s ease-in-out; /* Smooth transition for background image */
+            transition: background-image 1s ease-in-out;
         }
 
         .form-container {
-            background-color: rgba(255, 255, 255, 0.8); /* Slight transparency to see the background */
+            background-color: rgba(255, 255, 255, 0.8);
             border-radius: 12px;
             padding: 40px;
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
@@ -41,35 +41,16 @@
             box-shadow: 0 0 5px rgba(92, 184, 92, 0.5);
         }
 
-        .form-select {
-            border-radius: 8px;
-        }
-
-        .input-group-text {
-            border-radius: 8px 0 0 8px;
-        }
-
-        .input-group {
-            margin-bottom: 15px;
-        }
-
         .btn-primary {
             background-color: #5cb85c;
             border-color: #5cb85c;
             border-radius: 8px;
-            padding: 10px 25px;
+            padding: 12px 30px;
+            font-size: 16px;
         }
 
         .btn-primary:hover {
             background-color: #4cae4c;
-        }
-
-        .alert-danger {
-            margin-top: 20px;
-        }
-
-        label {
-            font-weight: 600;
         }
 
         .btn-logout {
@@ -77,17 +58,43 @@
             border-color: #dc3545;
             border-radius: 8px;
             padding: 10px 25px;
+            font-size: 16px;
+            margin-top: 20px;
         }
 
         .btn-logout:hover {
             background-color: #c82333;
         }
-    </style>
 
-    <!-- Preload the background image for faster loading -->
-    <link rel="preload" href="/static/images/1.jpg" as="image">
+        .username-info {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .info-box {
+            background-color: #5cb85c;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 30px;
+        }
+
+        label {
+            font-weight: 600;
+        }
+    </style>
 </head>
 <body>
+
+    <!-- Username Display -->
+    <div class="info-box">
+        <span>Welcome, <span th:text="${username}"></span></span>
+    </div>
 
     <div class="container form-container">
         <h2 class="text-center">Gym Membership Registration</h2>
@@ -186,13 +193,12 @@
             <div class="col-md-12 text-center">
                 <button type="submit" class="btn btn-primary">Register</button>
             </div>
-
         </form>
 
         <!-- Logout button (outside of the form) -->
         <div class="text-center mt-3">
             <form action="#" th:action="@{/logout}" method="post">
-                <button type="submit" class="btn btn-danger">Logout</button>
+                <button type="submit" class="btn btn-logout">Logout</button>
             </form>
         </div>
     </div>

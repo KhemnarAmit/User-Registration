@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>OTP Verified Successfully</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f7fa;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            text-align: center;
+            background-color: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 400px;
+        }
+
+        h2 {
+            color: #4CAF50;
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+
+        p {
+            font-size: 16px;
+            margin-bottom: 30px;
+            color: #666;
+        }
+
+        .btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: #45a049;
+        }
+
+        .footer {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #999;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>OTP Verified Successfully!</h2>
+        <p>Your OTP has been successfully validated. Now, click the button below to proceed with the registration.</p>
+        
+        <!-- Register Button -->
+        <form th:action="@{/success}" method="post">
+            <button type="submit" class="btn">Register Now</button>
+        </form>
+
+        <div class="footer">
+            <p>Thank you for verifying your email!</p>
+        </div>
+    </div>
+</body>
+</html>
