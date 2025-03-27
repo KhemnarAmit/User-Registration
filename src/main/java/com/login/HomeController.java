@@ -104,6 +104,7 @@ public class HomeController {
         otpService.sendOtpEmail(user.getUsername(), otp);  
         model.addAttribute("email",user.getUsername());
         model.addAttribute("warning","if you have not received mail please check your email-id again");
+        model.addAttribute("warning1","Please check spam folder as well");
         return "verify";  // Redirect to OTP verification page
     }
 	
