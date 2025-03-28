@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Contact Us - Success</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-center mt-5">Thank You for Contacting Us!</h1>
+        <div class="alert alert-success mt-3">
+            <h3>Your message has been received. Here are the details:</h3>
+            <p><strong>Name:</strong> <span th:text="${name}"></span></p>
+            <p><strong>Email:</strong> <span th:text="${email}"></span></p>
+            <p><strong>Message:</strong> <span th:text="${message}"></span></p>
+        </div>
+        <div class="text-center mt-4">
+            <a href="/" class="btn btn-primary">Go back to Home</a>
+        </div>
+    </div>
+</body>
+</html>

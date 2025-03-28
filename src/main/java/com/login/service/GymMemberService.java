@@ -3,14 +3,18 @@ package com.login.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import com.login.model.Contact;
 import com.login.model.GymMember;
 import com.login.repo.GymMemberRepository;
+import com.login.repo.UserRepository;
 
 @Service
 public class GymMemberService {
 
     @Autowired
     private GymMemberRepository repository;
+
     
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -23,4 +27,5 @@ public class GymMemberService {
         repository.save(member);
         return true;
     }
+    
 }

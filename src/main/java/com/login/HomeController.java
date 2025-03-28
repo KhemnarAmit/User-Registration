@@ -16,8 +16,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.ui.Model;
 import com.login.model.*;
+import com.login.service.ContactService;
 import com.login.service.GymMemberService;
 import com.login.service.OtpService;
 import com.login.service.OtpService;
@@ -41,10 +43,14 @@ public class HomeController {
 	private PasswordEncoder passwordEncoder;
 	private final UserService userService;
 	private final UserRepository userRepository;
+	
+	@Autowired
+	private final ContactService contactService;
 
 	public HomeController(UserService userService, UserRepository userRepository) {
 		this.userService = userService;
 		this.userRepository = userRepository;
+		this.contactService = new ContactService();
 	}
 
 	@GetMapping("/")
@@ -142,6 +148,25 @@ public class HomeController {
 		userService.registerUser(fullName,username,password);
 		System.out.println("registration is successfull");
 		return "login";
+	}
+	
+	
+	@PostMapping("/contact_save") 
+	public ModelAndView registerContactUs(@ModelAttribute Contact contact) {
+		ModelAndView modelAndView = new ModelAndView();
+		if(contactService.registerContact(contact)) {
+		modelAndView.addObject("name", contact.getName());
+		modelAndView.addObject("email",contact.getEmail());
+		modelAndView.addObject("message",contact.getMessage());
+		modelAndView.setViewName("contactsend");
+		return modelAndView;
+		}
+		else {
+			modelAndView.addObject("contacterror","make sure you can reach only once per mail id\n if you already reach out to us please wait for our response");
+			modelAndView.setViewName("error") ;
+		}
+		
+		return modelAndView;
 	}
 
 }
