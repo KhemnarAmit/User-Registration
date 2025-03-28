@@ -1,9 +1,14 @@
 package com.login;
 
 import java.util.Optional;
+import java.util.logging.Logger;
 
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.MailException;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -88,26 +93,30 @@ public class HomeController {
 	
 	
 	
-	
 	@PostMapping("/verify")
 	public String sendOtp(@ModelAttribute User user, Model model, HttpSession session) throws MessagingException {
-		
-		if (userRepository.findByUsername(user.getUsername()).isPresent()) {
-			model.addAttribute("error", "Username already exists!");
-			return "register"; // Stay on the register page and show the error
-		}
-		
-		session.setAttribute("fullName", user.getName());
-		session.setAttribute("username", user.getUsername());
-		session.setAttribute("password", user.getPassword());
-        String otp = otpService.generateOtp();
-        otpService.sendOtpEmail(user.getUsername(), otp);  
-        model.addAttribute("email",user.getUsername());
-        model.addAttribute("warning","if you have not received mail please check your email-id again");
-        model.addAttribute("warning1","Please check spam folder as well");
-        return "verify";  // Redirect to OTP verification page
-    }
-	
+	    
+	    // Check if the username already exists in the database
+	    if (userRepository.findByUsername(user.getUsername()).isPresent()) {
+	        model.addAttribute("error", "Username already exists!");
+	        return "register"; // Stay on the register page and show the error
+	    }
+	    
+	    // Save the user's details in the session
+	    session.setAttribute("fullName", user.getName());
+	    session.setAttribute("username", user.getUsername());
+	    session.setAttribute("password", user.getPassword());
+
+	    String otp = otpService.generateOtp();
+	    otpService.sendOtpEmail(user.getUsername(), otp);
+
+	    model.addAttribute("email", user.getUsername());
+	    model.addAttribute("warning", "If you have not received mail, please check your email address again.");
+	    model.addAttribute("warning1", "Please check the spam folder as well.");
+	    return "verify";  // Redirect to OTP verification page
+	}
+
+
 	
 	@PostMapping("/verify1")
 	public String verifyOtp(@RequestParam("otp") String otp, Model model) {
