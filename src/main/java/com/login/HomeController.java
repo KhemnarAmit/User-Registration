@@ -6,6 +6,8 @@ import java.util.logging.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailException;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,13 +21,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.ui.Model;
 import com.login.model.*;
+import com.login.service.*;
 import com.login.service.ContactService;
 import com.login.service.GymMemberService;
 import com.login.service.OtpService;
+import com.login.service.PaymentService;
 import com.login.service.OtpService;
 import com.login.service.UserService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
 
 import com.login.repo.*;
 
@@ -38,6 +43,11 @@ public class HomeController {
 	@Autowired
 	private OtpService otpService;
 	
+	@Autowired
+	private PaymentService paymentService;
+	
+	@Autowired
+	private JavaMailSender mailSender;
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
@@ -167,6 +177,34 @@ public class HomeController {
 		}
 		
 		return modelAndView;
+	}
+	
+	
+	@PostMapping("/savePaymentData") 
+	public ModelAndView savePaymentData(@ModelAttribute Payment payment) throws MessagingException {
+		ModelAndView modelAndView = new ModelAndView();
+		if(paymentService.registerPaymentDetails(payment)) {
+			MimeMessage message = mailSender.createMimeMessage();
+			MimeMessageHelper helper = new MimeMessageHelper(message,true);
+			String mailText = "Hello "+payment.getName()+" \nyour registration is successful"+"\nhere are the details of your payment that we received from you"+"\nplease take a note that once deadline is finished we will automatically stop your Gym Service";
+			modelAndView.addObject("transactionID", payment.getTransactionID());
+			modelAndView.addObject("name", payment.getName());
+			modelAndView.addObject("email", payment.getEmail());
+			modelAndView.addObject("date", payment.getDate());
+			modelAndView.addObject("file", payment.getImage());
+			modelAndView.setViewName("paymentSaveSuccess");
+			helper.setTo(payment.getEmail());
+			helper.setText(mailText);
+			helper.setSubject("Gym Registration Successful");
+			mailSender.send(message);
+			return modelAndView;
+		}
+		else {
+			modelAndView.addObject("paymentError", "Payment details not saved \n please check file size and try to save again \n if issue still not solved contact us by 'Contact Us' page");
+			modelAndView.setViewName("error");
+			return modelAndView;
+		}
+		
 	}
 
 }
