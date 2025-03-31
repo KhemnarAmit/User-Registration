@@ -179,7 +179,12 @@ public class HomeController {
 			MimeMessageHelper helper = new MimeMessageHelper(message, true);
 			String mailText = "Hello " + payment.getName() + " \nyour registration is successful"
 					+ "\nhere are the details of your payment that we received from you"
-					+ "\nplease take a note that once deadline is finished we will automatically stop your Gym Service";
+					+ "\nplease take a note that once deadline is finished we will automatically stop your Gym Service\n\n"+
+					payment.getTransactionID()+"\n"+
+					payment.getName()+"\n"
+					+payment.getEmail()+"\n"
+					+payment.getDate()+"\n"
+					+payment.getImage();
 			modelAndView.addObject("transactionID", payment.getTransactionID());
 			modelAndView.addObject("name", payment.getName());
 			modelAndView.addObject("email", payment.getEmail());
