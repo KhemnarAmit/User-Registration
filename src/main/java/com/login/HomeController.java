@@ -1,32 +1,28 @@
 package com.login;
 
-import java.util.Optional;
-import java.util.logging.Logger;
-
-import org.slf4j.LoggerFactory;
+import org.springframework.http.MediaType;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.MailException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.ui.Model;
 import com.login.model.*;
-import com.login.service.*;
 import com.login.service.ContactService;
 import com.login.service.GymMemberService;
 import com.login.service.OtpService;
 import com.login.service.PaymentService;
-import com.login.service.OtpService;
 import com.login.service.UserService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.mail.MessagingException;
@@ -39,13 +35,13 @@ public class HomeController {
 
 	@Autowired
 	private GymMemberService service;
-	
+
 	@Autowired
 	private OtpService otpService;
-	
+
 	@Autowired
 	private PaymentService paymentService;
-	
+
 	@Autowired
 	private JavaMailSender mailSender;
 
@@ -53,7 +49,7 @@ public class HomeController {
 	private PasswordEncoder passwordEncoder;
 	private final UserService userService;
 	private final UserRepository userRepository;
-	
+
 	@Autowired
 	private final ContactService contactService;
 
@@ -67,7 +63,7 @@ public class HomeController {
 	public String showRegistrationForm(Model model) {
 		model.addAttribute("gymMember", new GymMember());
 		String username = SecurityContextHolder.getContext().getAuthentication().getName();
-		model.addAttribute("username",username);
+		model.addAttribute("username", username);
 		return "index";
 	}
 
@@ -102,91 +98,88 @@ public class HomeController {
 	public String error() {
 		return "error";
 	}
+
 	@GetMapping("/forgot-password")
 	public String forgotPassword() {
 		return "forgot-password";
 	}
-	
-	
-	
+
 	@PostMapping("/verify")
 	public String sendOtp(@ModelAttribute User user, Model model, HttpSession session) throws MessagingException {
-	    
-	    // Check if the username already exists in the database
-	    if (userRepository.findByUsername(user.getUsername()).isPresent()) {
-	        model.addAttribute("error", "Username already exists!");
-	        return "register"; // Stay on the register page and show the error
-	    }
-	    
-	    // Save the user's details in the session
-	    session.setAttribute("fullName", user.getName());
-	    session.setAttribute("username", user.getUsername());
-	    session.setAttribute("password", user.getPassword());
 
-	    String otp = otpService.generateOtp();
-	    otpService.sendOtpEmail(user.getUsername(), otp);
+		// Check if the username already exists in the database
+		if (userRepository.findByUsername(user.getUsername()).isPresent()) {
+			model.addAttribute("error", "Username already exists!");
+			return "register"; // Stay on the register page and show the error
+		}
 
-	    model.addAttribute("email", user.getUsername());
-	    model.addAttribute("warning", "If you have not received mail, please check your email address again.");
-	    model.addAttribute("warning1", "Please check the spam folder as well.");
-	    return "verify";  // Redirect to OTP verification page
+		// Save the user's details in the session
+		session.setAttribute("fullName", user.getName());
+		session.setAttribute("username", user.getUsername());
+		session.setAttribute("password", user.getPassword());
+
+		String otp = otpService.generateOtp();
+		otpService.sendOtpEmail(user.getUsername(), otp);
+
+		model.addAttribute("email", user.getUsername());
+		model.addAttribute("warning", "If you have not received mail, please check your email address again.");
+		model.addAttribute("warning1", "Please check the spam folder as well.");
+		return "verify"; // Redirect to OTP verification page
 	}
 
-
-	
 	@PostMapping("/verify1")
 	public String verifyOtp(@RequestParam("otp") String otp, Model model) {
-	    boolean isValidOtp = otpService.verifyOtp(otp); // Check OTP validity
-	    
-	    // Debugging logs to check what's happening
-	    System.out.println("Entered OTP: " + otp);
-	    System.out.println("Generated OTP: " + otpService.getGeneratedOtp());
-	    
-	    if (isValidOtp) {
-	        return "success";  // Redirect to success page if OTP matches
-	    } else {
-	        model.addAttribute("error", "Invalid OTP. Please try again.");
-	        return "verify";  // Redirect back to OTP verification page with error message
-	    }
+		boolean isValidOtp = otpService.verifyOtp(otp); // Check OTP validity
+
+		// Debugging logs to check what's happening
+		System.out.println("Entered OTP: " + otp);
+		System.out.println("Generated OTP: " + otpService.getGeneratedOtp());
+
+		if (isValidOtp) {
+			return "success"; // Redirect to success page if OTP matches
+		} else {
+			model.addAttribute("error", "Invalid OTP. Please try again.");
+			return "verify"; // Redirect back to OTP verification page with error message
+		}
 	}
-	
+
 	@PostMapping("/success")
 	public String successRegistration(HttpSession session) {
 		String fullName = (String) session.getAttribute("fullName");
 		String username = (String) session.getAttribute("username");
 		String password = (String) session.getAttribute("password");
-		userService.registerUser(fullName,username,password);
+		userService.registerUser(fullName, username, password);
 		System.out.println("registration is successfull");
 		return "login";
 	}
-	
-	
-	@PostMapping("/contact_save") 
+
+	@PostMapping("/contact_save")
 	public ModelAndView registerContactUs(@ModelAttribute Contact contact) {
 		ModelAndView modelAndView = new ModelAndView();
-		if(contactService.registerContact(contact)) {
-		modelAndView.addObject("name", contact.getName());
-		modelAndView.addObject("email",contact.getEmail());
-		modelAndView.addObject("message",contact.getMessage());
-		modelAndView.setViewName("contactsend");
-		return modelAndView;
+		if (contactService.registerContact(contact)) {
+			modelAndView.addObject("name", contact.getName());
+			modelAndView.addObject("email", contact.getEmail());
+			modelAndView.addObject("message", contact.getMessage());
+			modelAndView.setViewName("contactsend");
+			return modelAndView;
+		} else {
+			modelAndView.addObject("contacterror",
+					"make sure you can reach only once per mail id\n if you already reach out to us please wait for our response");
+			modelAndView.setViewName("error");
 		}
-		else {
-			modelAndView.addObject("contacterror","make sure you can reach only once per mail id\n if you already reach out to us please wait for our response");
-			modelAndView.setViewName("error") ;
-		}
-		
+
 		return modelAndView;
 	}
-	
-	
-	@PostMapping("/savePaymentData") 
+
+	@PostMapping("/savePaymentData")
 	public ModelAndView savePaymentData(@ModelAttribute Payment payment) throws MessagingException {
 		ModelAndView modelAndView = new ModelAndView();
-		if(paymentService.registerPaymentDetails(payment)) {
+		if (paymentService.registerPaymentDetails(payment)) {
 			MimeMessage message = mailSender.createMimeMessage();
-			MimeMessageHelper helper = new MimeMessageHelper(message,true);
-			String mailText = "Hello "+payment.getName()+" \nyour registration is successful"+"\nhere are the details of your payment that we received from you"+"\nplease take a note that once deadline is finished we will automatically stop your Gym Service";
+			MimeMessageHelper helper = new MimeMessageHelper(message, true);
+			String mailText = "Hello " + payment.getName() + " \nyour registration is successful"
+					+ "\nhere are the details of your payment that we received from you"
+					+ "\nplease take a note that once deadline is finished we will automatically stop your Gym Service";
 			modelAndView.addObject("transactionID", payment.getTransactionID());
 			modelAndView.addObject("name", payment.getName());
 			modelAndView.addObject("email", payment.getEmail());
@@ -198,13 +191,32 @@ public class HomeController {
 			helper.setSubject("Gym Registration Successful");
 			mailSender.send(message);
 			return modelAndView;
-		}
-		else {
-			modelAndView.addObject("paymentError", "Payment details not saved \n please check file size and try to save again \n if issue still not solved contact us by 'Contact Us' page");
+		} else {
+			modelAndView.addObject("paymentError",
+					"Payment details not saved \n please check file size and try to save again \n if issue still not solved contact us by 'Contact Us' page\n or we already have your data");
 			modelAndView.setViewName("error");
 			return modelAndView;
 		}
-		
+
 	}
+
+	@GetMapping("/getImage/{transactionID}")
+    public ResponseEntity<byte[]> getImage(@PathVariable long transactionID) {
+        // Get the payment from the database by transactionID
+        Payment payment = paymentService.getPaymentByTransactionID(transactionID);
+
+        // Check if the payment exists and contains the image
+        if (payment == null || payment.getImage() == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND); // Return 404 if no image found
+        }
+
+        byte[] imageData = payment.getImage(); // Get the image data
+
+        // Return the image as byte array in the response with content type set inline
+        return ResponseEntity
+                .status(HttpStatus.OK)  // Status 200 OK
+                .contentType(MediaType.IMAGE_JPEG) // Or MediaType.IMAGE_PNG for PNG
+                .body(imageData);  // Image data in the body
+    }
 
 }

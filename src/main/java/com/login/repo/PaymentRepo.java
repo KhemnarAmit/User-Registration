@@ -8,4 +8,5 @@ import com.login.model.*;
 public interface PaymentRepo extends JpaRepository<Payment,Long> {
 	
 	Optional<Payment> findByEmail(String email);
+	Payment findByTransactionID(long TransactionID);
 }

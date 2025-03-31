@@ -15,20 +15,25 @@
                     <th>Name</th>
                     <th>Email</th>
                     <th>Date</th>
-					<th>Uploaded File</th>
+                    <th>Uploaded File</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
                     <td th:text="${transactionID}"></td>
-                   <td th:text="${name}"></td>
-				   <td th:text="${email}"></td>
-				   <td th:text="${date}"></td>
-				   <td th:text="${file}"></td>
+                    <td th:text="${name}"></td>
+                    <td th:text="${email}"></td>
+                    <td th:text="${date}"></td>
+                    <!-- Display image as a link or image -->
+                    <td>
+                        <a th:href="@{/getImage/{transactionID}(transactionID=${transactionID})}" target="_blank">
+                            View Uploaded Image
+                        </a>
+                    </td>
                 </tr>
             </tbody>
         </table>
-		<p><strong>Message:- </strong> We have send you can E-mail with the details you uploaded please check if there are any differene please reach out us Thank you !</p>
+        <p><strong>Message: </strong> We have sent you an email with the details you uploaded. Please check. If there are any differences, please reach out to us. Thank you!</p>
 
         <a href="/" class="btn btn-primary">Back to Home</a>
     </div>

@@ -25,4 +25,11 @@ public class PaymentService {
 		return true;
 	}
 	
+	public Payment getPaymentByTransactionID(long transactionID) {
+		
+		Payment payment = paymentRepo.findByTransactionID(transactionID);
+		return payment;
+		
+	}
+	
 }
