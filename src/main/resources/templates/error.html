@@ -57,8 +57,8 @@
 <div class="container">
     <h1>Error</h1>
     <p th:text="${errorMessage}"></p> <!-- Display the error message dynamically -->
-	<p th:if="${contacterror}"><strong>Error Message: </strong><span th:text="${contacterror}"></span></p>
-	<p th:if="${paymentError}"><strong>Error Message: </strong><span th:text="${paymentError}"></span></p>
+	<p><strong>Error Message: </strong><span th:text="${contacterror}"></span></p>
+	<p><strong>Error Message: </strong><span th:text="${paymentError}"></span></p>
     <a href="/">
         <button>Back to Home</button>
     </a>
